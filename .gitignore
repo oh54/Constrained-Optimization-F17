@@ -3,3 +3,4 @@ Report/*.aux
 Report/*.log
 Report/.gz
 Report/.toc
+Report/.pdf
