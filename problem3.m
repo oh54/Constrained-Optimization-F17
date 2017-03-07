@@ -9,9 +9,9 @@ x1c2 = -2*X2+6;
 x1c3 = 2*X2+2;
 
 %Making the contour plot with the constraints
-v = [0:2:10 10:10:100 100:20:200];
+v = [0:0.5:3 3:2:15 15:10:100 100:20:200];
 
-contour(x1,x2,q,v, 'linewidth',2)
+contour(x1,x2,q,v, 'linewidth',1)
 colorbar
 
 hold on
