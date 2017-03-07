@@ -32,6 +32,10 @@ g = A * lambda_true - H * x_true;
 
 
 % Q 6
+%The sensitivities add to the EqualityQPSolver 
+[x,lambda,dx,dlambda] = EqualityQPSolver(H,g,A,b);
+dx
+dlambda
 % Q 7
 % Q 8
 % Q 9 

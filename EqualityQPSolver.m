@@ -1,4 +1,4 @@
-function [ x, lambda ] = EqualityQPSolver(H,g,A,b)
+function [ x, lambda, dx, dlambda ] = EqualityQPSolver(H,g,A,b)
     % K matrix
     
     sizes = size(A);
@@ -12,6 +12,11 @@ function [ x, lambda ] = EqualityQPSolver(H,g,A,b)
     
     x = KKT_x(1:end-2);
     lambda = KKT_x(end-1:end);
+    
+    out_sens = -KKT_A^(-1);
+
+    dx = out_sens(:,1:length(g));
+    dlambda = out_sens(:,length(g)+1:end);
     
 end
 
