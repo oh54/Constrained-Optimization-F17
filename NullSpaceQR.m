@@ -11,5 +11,5 @@ function [x, lambda] = NullSpaceQR(n, u_bar, d_0)
     X_y = R'\b;
     X_z = (Q_2'*H*Q_2) \ (-Q_2'*(H*Q_1*X_y+g));
     x = Q_1*X_y + Q_2*X_z;
-    lambda = R .\ (Q_2'*(H*x+g));
-end
+    lambda = R \ Q_1'*(H*x+g);
+end     
