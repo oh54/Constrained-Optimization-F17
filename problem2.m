@@ -1,16 +1,16 @@
-clear all
+clear
 clc 
 close all
 
+%% Compare performance of LDL, LDL sparse, LU, LU sparse, Null-space, Range-space solvers
 u_bar = 0.2;
 d_0 = 1;
-% n = 5;
 clc
 
-ns = [10:10:1000];
-times = zeros(4, size(ns,2));
+ns = 10:10:1000;
+times = zeros(6, size(ns,2));
 
-name = 'Data/problem_2-question_9.mat';
+name = 'Data/problem_2.mat';
 if exist(name, 'file') 
     disp('Loading data..')
     load(name)
@@ -42,6 +42,14 @@ else
         [x, lambda] = RangeSpaceSolver(n,u_bar,d_0);
         times(4,i) = cputime-start_time;    
 
+        start_time = cputime;
+        [x, lambda] = EqualityQPSolverLDL(n,u_bar,d_0, true);
+        times(5,i) = cputime-start_time;
+
+        start_time = cputime;
+        [x, lambda] = EqualityQPSolverLU(n,u_bar,d_0, true);
+        times(6,i) = cputime-start_time;
+        
         i = i + 1;
     end
     save(name, 'times')
@@ -54,4 +62,13 @@ hold on
 plot(ns,times(2,:), 'bs')
 plot(ns,times(3,:), 'g*')
 plot(ns,times(4,:), 'k.')
-legend('LDL solver','LU solver','Null Space solver','Range Space solver')
+plot(ns,times(5,:), 'mx')
+plot(ns,times(6,:), 'cd')
+xlabel('Problem size: n')
+ylabel('CPU time')
+legend('LDL solver','LU solver','Null Space solver','Range Space solver', 'LDL sparse solver','LU sparse solver')
+
+%% Plot sparsity pattern of KKT matrix
+n = 100;
+KKT = ConstructKKT(n, u_bar, d_0);
+spy(KKT);
