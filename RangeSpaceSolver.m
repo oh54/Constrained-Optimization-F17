@@ -1,4 +1,7 @@
 function [x, lambda] = RangeSpaceSolver(n, u_bar, d_0)
+    % This solver is already sparse as the Cholesky factorization with
+    % 3 ouput values require sparse input
+    
     [H,g,A,b] = ConstructFactorization(n,u_bar,d_0);
     
     n = size(A,1);
