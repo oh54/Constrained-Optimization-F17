@@ -57,6 +57,7 @@ end
 disp('Finished')
 
 % Geranate plots
+figure()
 plot(ns,times(1,:), 'ro')
 hold on
 plot(ns,times(2,:), 'bs')
@@ -71,4 +72,5 @@ legend('LDL solver','LU solver','Null Space solver','Range Space solver', 'LDL s
 %% Plot sparsity pattern of KKT matrix
 n = 100;
 KKT = ConstructKKT(n, u_bar, d_0);
+figure()
 spy(KKT);
