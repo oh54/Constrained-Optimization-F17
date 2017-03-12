@@ -5,7 +5,8 @@ function [x, lambda, dx, dlambda] = EqualityQPSolver(H,g,A,b)
     KKT_b = -[g;b];
 
     [L,D,p] = ldl(KKT_A,'lower','vector');
-    KKT_x = L'\(D\(L\KKT_b(p)));
+    KKT_x(p) = L'\(D\(L\KKT_b(p)));
+    KKT_x = KKT_x';
 
     x = KKT_x(1:n);
     lambda = KKT_x(n+1:n+m);
