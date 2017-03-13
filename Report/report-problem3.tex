@@ -11,12 +11,38 @@ x_2>=0.
 \end{split}
 \end{equation}
 in MatLab a contour plot of this is made and seen in figure~\ref{fig:exe3_contour_plot}.
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 		\includegraphics{exe3_contour_plot.png}
 	\caption{A contour plot of the problem.}
 	\label{fig:exe3_contour_plot}
 \end{figure}
-
-
+From the line it is seen that the feasible region is a pentagon.\\
+The problem can be written in the standart martix way as:
+\[H=\begin{bmatrix}
+	2 & 0 \\0 & 2
+\end{bmatrix}\]
+\[g=\begin{bmatrix}
+	-2 \\-5
+\end{bmatrix}\]
+\[A=\begin{bmatrix}
+	1 & -1 & -1 & 1 & 0 \\
+	-2 & -2 & 2 & 0 & 1
+\end{bmatrix}\]
+\[b= \begin{bmatrix}
+	-2 \\-6 \\-2 \\0 \\0 \\
+\end{bmatrix}\]
+Then the general KKT system can be written as:
+\[\begin{bmatrix}
+	H & -A \\A^T & 0
+\end{bmatrix}\] 
+*
+\[\begin{bmatrix}
+	x\\ \lambda
+\end{bmatrix}\] 
+=
+\[\begin{bmatrix}
+	-g\\ b
+\end{bmatrix}\]
+When the system can be solve with the same QP solver as used for problem 1. That gives:
 
