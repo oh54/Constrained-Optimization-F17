@@ -1,4 +1,5 @@
 *~
+*.asv
 Report/*.aux
 Report/*.log
 Report/.gz
