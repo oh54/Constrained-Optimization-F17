@@ -15,12 +15,12 @@ function [x, lambda] = RangeSpaceSolver(n, u_bar, d_0)
     H_A = A'*H*A;
     
     % H_A*lambda = b + A'*v
-    [L,~,s] = chol(sparse(H_A),'lower','vector');
+    [L_H,~,s_H] = chol(sparse(H_A),'lower','vector');
     tmp = b + A'*v;
-    lambda(s) = L'\(L\tmp(s));
+    lambda(s_H) = L_H'\(L_H\tmp(s_H));
     lambda = lambda';
 
     % H*x = A*lambda - g
     tmp = A*lambda - g;
-    x = H \ tmp;
+    x =  L'\(L\tmp(s));
 end
