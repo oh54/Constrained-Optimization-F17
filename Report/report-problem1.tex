@@ -20,7 +20,7 @@ Then the general KKT system can be written as:
 \end{bmatrix} =\begin{bmatrix}
 	-g\\ b
 \end{bmatrix}\]
-The system is solve with a function in MatLab, see the code in ?X?X. The result shows that:
+The system is solve with a function in MatLab where use the backslash command, see the code in ?X?X. The result shows that:
 \[x=\begin{bmatrix}
 	0.5 \\ 0.25 \\ 4
 \end{bmatrix}\]
@@ -28,7 +28,6 @@ The system is solve with a function in MatLab, see the code in ?X?X. The result 
 	0.7 \\0.5 
 \end{bmatrix}\]
 To test the solver random values for x and $\lambda$ are generated, from these the H, g, A and b are determined. With these new matrix the system are solved again to see if the x and lambda. The solve works as expected and gives the same values for x and lambda as there were generated.
-
 To see the sensitivity of the problem the parameter sensitivity analyse is made. The general function is as followed. 
 \[F(x,\lambda;p)= \begin{bmatrix}
 	\nabla_x f(x,p)- \nabla_x c(x,p)\lambda \\ c(x,p)
@@ -48,5 +47,20 @@ From this the sensitivity of this problem can be written as:
 1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&0&0\\0&0&0&0&0\\\end{bmatrix}\]
 \[W_{xx}=H\]
 \[[\nabla x(p) \lambda(p)]= - \begin{bmatrix}H & -A^T \\-A & 0\end{bmatrix}\]
-
 This are added to the solver and the sensitivity are found as:
+\[\nabla x(p)=\begin{bmatrix}
+ 	-0.0909 &  -0.0909 &  0.0909 \\
+   	-0.0909 &  -0.0909 &  0.0909 \\
+    0.0909  &   0.0909 & -0.0909 \\
+    0.2727  &  -0.7273 &  0.7273 \\
+   	-0.4545 &   0.5455 &  0.4545	
+\end{bmatrix}\]
+\[\lambda(p)=\begin{bmatrix}
+	0.2727  & -0.4545 \\
+   -0.7273  &  0.5455 \\
+    0.7273  &  0.4545 \\
+    0.1818  &  0.3636 \\
+    0.3636  &  2.7273 
+\end{bmatrix}\]
+Why is this correct??? 
+When have such a quadratic problem it's always also have a dual problem.   
