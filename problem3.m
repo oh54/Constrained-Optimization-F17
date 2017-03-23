@@ -1,4 +1,4 @@
-%clc; clear all; close all;
+clc; clear all; close all;
 X1 = 0:1:5;
 X2 = 0:1:3;
 [x1,x2] = meshgrid(X1,X2);
@@ -62,7 +62,8 @@ c3 = -x5(1)+2*x5(2)+2;
 A0 = [];
 b0 = [];
 %solve for W = Ø
-x0 = H\-g
+x0 = H\-g;
+lambda0 = 0;
 %Controle of solution 
 c1 = x0(1)-2*x0(2)+2;
 c2 = -x0(1)-2*x0(2)+6;
@@ -85,42 +86,31 @@ c3 = -x1(1)+2*x1(2)+2;
 %Plot the active-set and make a table
 figure(1)
 hold on
-p1 = plot(x35(1),x35(2),'r*', 'MarkerSize',15)
-p2 = plot(x5(1),x5(2),'b*', 'MarkerSize',15)
-p3 = plot(x0(1),x0(2),'g*', 'MarkerSize',15)
-p4 = plot(x1(1),x1(2),'k*', 'MarkerSize',15)
+p1 = plot(x35(1),x35(2),'r*', 'MarkerSize',15);
+p2 = plot(x5(1),x5(2),'b*', 'MarkerSize',15);
+p3 = plot(x0(1),x0(2),'g*', 'MarkerSize',15);
+p4 = plot(x1(1),x1(2),'k*', 'MarkerSize',15);
 hold off
-legend([p1 p2 p3 p4],'Workingset 1','Workingset 2','Workingset 3', 'Workingset 4')
+legend([p1 p2 p3 p4],'Workingset 1','Workingset 2','Workingset 3', 'Workingset 4');
+%%
+Name = {'Working set 1';'Working set 2';'Working set 3';'Working set 4'};
+Active_cons = [35; 5; 2; 1];
+x_1 = [x35(1); x5(1); x0(1); x1(1)];
+x_2 = [x35(2); x5(2); x0(2); x1(2)];
+lambda_1 = [lambda35(1); lambda5; NaN; lambda1];
+lambda_2 = [lambda35(2); NaN; NaN; NaN];
+
+T = table(Active_cons,x_1,x_2,lambda_1, lambda_2,'RowNames',Name)
 %%
 I = eye(size(A,2));
 Alin = [A' I];
-f = [1 1 1 1 1 1 1];
+f = [0 0 1 1 1 1 1]';
 blin = b';
-x=linprog(f,Alin,blin);
+x_lp=linprog(f,-Alin,-blin,[],[],zeros(7,1),inf)
 
 
 %% 
+x0 = x_lp;
+x_qp = quadprog(H,g,-A',-blin,[],[],zeros(2,1),inf,x0)
 
-%%
-%%
-%Compute a feasible starting point x0;
-%SetW0 to be a subset of the active constraints at x0;
-for k = 0, 1, 2, . . .
-%Solve (16.39) to find pk ;
-    if pk = 0
-    %Compute Lagrange multipliers ˆ?i that satisfy (16.42),
-    %with ˆW = Wk ;
-        if lamb_i >= 0 for all i %? W_k ? I
-            stop %with solution x? = x_k ;
-        else
-        %j ? arg min_(j?Wk?I) lamb_j ;
-        %x_k+1 ? x_k; W_k+1 ? W_k\{j};
-    else %(pk ~= 0)
-    %Compute ?k from (16.41);
-    %xk+1 ? xk + ?k pk ;
-    if %there are blocking constraints
-    %ObtainWk+1 by adding one of the blocking
-    %constraints toWk ;
-    else
-    %Wk+1 ? Wk ;
-end(for)
+
