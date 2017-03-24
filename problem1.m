@@ -5,12 +5,13 @@ clc; clear all; close all;
 g = [ -8 -3 -3 ]';
 b = [ 3 0 ]';
 A = [ 1 0 1 ; 0 1 1 ]';
-H = [ 6 4 2 ; 4 5 4 ; 2 4 4 ];
+H = [ 6 2 1 ; 2 5 2 ; 1 2 4 ];
 %%
 % Q 2
 % Q 3
 % Q 4
 [ x, lambda ] = EqualityQPSolver(H,g,A,b)
+%%
 % Q 5
 % q5
 % nr of unknowns
