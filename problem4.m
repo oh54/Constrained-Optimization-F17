@@ -128,3 +128,12 @@ p_15 = scatter(fval_15_rf, r_15_rf, 20);
 txt15 = '\leftarrow P_{15}';
 text(fval_15_rf + 0.1, r_15_rf -0.05, txt15);
 
+
+% Problem 5 question 4
+H = H;
+g = f;
+C = [-A' eye(6)];
+A = Aeq';
+b = beq;
+d = [-15 ; zeros(6,1)];
+
