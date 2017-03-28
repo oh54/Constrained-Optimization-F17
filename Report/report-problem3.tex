@@ -1,80 +1,205 @@
+
+\newpage
 \subsection{Problem 3 - Inequality Constrained Quadratic Programming}
-From page 475 in Nocedal and Wright the following system is given.
+From page 475 in Nocedal and Wright the following quadratic program is given.
+
 \begin{equation}
-\begin{split}
-\min_{x} q(x) = (x_1-1)^2+(x_2-2.5)^2 \\
-s.t. x_1-2x_2+2> = 0,\\
--x_1-2x_2+6>=0,\\
--x_1+2x_2+2>=0,\\
-x_1>=0,\\
-x_2>=0.
-\end{split}
+\begin{aligned}
+    \min_{x} q(x) = (x_1-1)^2+(x_2-2.5)^2 \\
+    s.t. \quad x_1-2x_2+2> = 0,\\
+    -x_1-2x_2+6>=0,\\
+    -x_1+2x_2+2>=0,\\
+    x_1>=0,\\
+    x_2>=0.
+\end{aligned}
 \end{equation}
-in MatLab a contour plot of this is made and seen in figure~\ref{fig:exe3_contour_plot}.
-\begin{figure}[H]
-	\centering
-		\includegraphics{exe3_contour_plot.png}
-	\caption{A contour plot of the problem.}
-	\label{fig:exe3_contour_plot}
+
+
+\textbf{Make a contour plot of the problem.}
+
+Contour plot of the problem can be seen on figure \ref{fig:3_1}. As apparent from the plot, most of the search region is cut off by the constraints, feasible region can be seen in white.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{fig_3_1.eps}
+    \caption{Contour plot with constraints}
+    \label{fig:3_1}
 \end{figure}
-From the constrain lines it is seen that the feasible region is a pentagon starting from the origin.\\
-The problem can be written in the standart martix way as:
+
+
+\textbf{Write the KKT-conditions for this problem.}
+
+Using matrix notation the initial problem can be written as
+\begin{equation}
+\begin{aligned}
+    \min_{x} f(x) = \frac{1}{2} x'Hx + g'x  \\
+    s.t. \quad A'x \geq b, \\
+\end{aligned}
+\end{equation}
+
 \[H=\begin{bmatrix}
-	2 & 0 \\0 & 2
-\end{bmatrix}\]
+	2 & 0 \\
+	0 & 2
+    \end{bmatrix}
+\]
+
 \[g=\begin{bmatrix}
-	-2 \\-5
-\end{bmatrix}\]
+	-2 \\
+	-5
+    \end{bmatrix}
+\]
+
 \[A=\begin{bmatrix}
-	1 & -1 & -1 & 1 & 0 \\
-	-2 & -2 & 2 & 0 & 1
-\end{bmatrix}\]
+    1 & -1 & -1 & 1 & 0 \\
+    -2 & -2 & 2 & 0 & 1 
+    \end{bmatrix}
+\]
+
 \[b= \begin{bmatrix}
-	-2 \\-6 \\-2 \\0 \\0 \\
-\end{bmatrix}\]
-Then the general KKT system can be written as:
+    -2 \\
+    -6 \\
+    -2 \\
+    0 \\
+    0
+    \end{bmatrix}
+\]
+
+
+
+Point $x^*$ is a solution if the KKT conditions are satisfied
+
+\begin{equation}
+\begin{aligned}
+    Hx^* + g - A \lambda = 0  \\
+    a_{i}'x^* = b_i \quad \text{for all i} \in  A(x^*) \\
+    a_{i}'x^* \geq b_i \quad \text{for all i} \in I \setminus A(x^*) \\
+    \lambda_i^* \geq 0 \quad \text{for all i} \in A(x^*)
+\end{aligned}
+\end{equation}
+
+where $A(x^*)$ is the active set at point $x^*$.
+
+In other words $x^*$ is a solution if gradient of the Lagrangian at that point is zero, active constraints hold with equality and inactive constraints hold i.e. $x^*$ is feasible, and lambdas are non-negative meaning it is not possible to make a step that reduces the objective while still staying feasible. 
+
+
+\textbf{Argue that the KKT-conditions are both necessary and sufficient optimality conditions.}
+
+Theorem 16.4 p.464 in N\&W and its conclusion state that if $x^*$ satisfies the KKT conditions specified above and H is positive semidefinite then $x^*$ is the unique global solution. Since H is positive definite (identity matrix multiplied by 2) and therefore also positive semidefinite, then $x^*$ is a global unique solution provided the KKT conditions are satisfied.
+
+
+\textbf{Make a function for solution of convex equality constrained QPs (see Problem 1 and Problem 2).}
+
+We used the same EqualityQPSolver function defined in problem 1. That solves the KKT system in form 
+
 \[\begin{bmatrix}
-	H & -A \\A^T & 0
-\end{bmatrix}\times
+	    H & -A \\
+	    -A^T & 0
+    \end{bmatrix} \times
 	\begin{bmatrix}
-		x\\ \lambda
+		x\\
+		\lambda
 	\end{bmatrix}=
-		\begin{bmatrix}
-			-g\\ b
-	\end{bmatrix}\]
-When the system can be solve with the same QP solver as used for problem 1. That gives:
-\[x=\begin{bmatrix}
-	-2 \\ 0
-\end{bmatrix}\]
+	- \begin{bmatrix}
+		g\\
+		b
+	\end{bmatrix}
+\]
 
-\[\lambda=\begin{bmatrix}
-	0 \\1.8 \\-0.3 \\-2.1 \\ 3.0
-\end{bmatrix}\]
-Where all the values are multiply with 10 in the power of 16. 
-\\A way to found the optimal solution is with an active set algorithm. This is applyed as the one in the Example 16.4 in N and W. The algorithm is seen in the MatLab code and the contour plot with the four different workingset are seen in figure \ref{fig:exe3_contour_plot_workingset} below. 
-\begin{figure}[H]
-	\centering
-		\includegraphics[scale=0.65]{exe3_contour_plot_workingset.png} 
-	\caption{A contour plot of the problem, with the working set applyed.}
-	\label{fig:exe3_contour_plot_workingset}
-\end{figure} 
-In figure \ref{fig:exe3_table_part5} below, values for the iteration are shown. 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=1]{exe3_table_part5.png} 
-	\caption{Table from MatLab showing values from the four iterations.}
-	\label{fig:exe3_table_part5}
-\end{figure}
-From the figure it is seen that for the first working set, constrain 3 and 5 where active. This set found the point (2;0) at the contour plot it is seen that this point is feasible, but that it is not the optimal solution. This is also seen from the Lagrange multipliers, $\lambda$, where they both are negative which they don't are for the optimal solution. \\The next step was to chose a new working set, since the first have two active constrains one of them was remove. Here the 'rule of thumbs' says that the constrain with the most negative Lagrange multipliers should be inactive. There for working set 2 have the 5th. constrain active. This iteration gives the solution (1;0) and $\lambda$ = -5. Since the Lagrange multiplier still is negative, the point is not the optimal solution, this is also confirmed from the contour plot. \\The 3th. step is, again, to remove the constrain belong to the most negative Lagrange multiplier. In this case there are only one, this means that the third working set doesn't have any active constrains. In that case there wouldn't  be any Lagrange multipliers since they 'belongs' to the constrains. The point found in is iteration was (1;2.5). Since there are no Lagrange multiplier the point is inserted in the 'original' constrains which all of the should be equal ore bigger than zero. From the first constrain it is seen that it gives -2 which mean that the constrain is not full fill and therefor not a solution to the problem. From the contour plot it is seen that the point is in the center (if it doesn't have any constrain), but it is also seen that the point is beyond one of the constrain and there for confirm that the found point is not a solution.\\Finally the last working set is chosen to be the first constrain since it was this one there was not full fill. This give the point (1.4;1.7) and $\lambda$ = 0.8. Since the Lagrange multiplier is positive it could be an optimal solution, there for all the constrain are controlled with the found point. It is seen that they give; 0, 1.2 and 4 for the first three constrain, and since constrain four and five are the $x_1$ and $x_2$ bigger ore equal zero they are also full fill. This mean that the found solution is valid and the Lagrange multiplier indicate an optimal solution. This is finally verified by the contour plot where it is easy seen that the point is the global minimum, and the problem is solved. \\
-\\
-		EXPLAIN THE ACTIVE SET METHODE!!
-\\
-\\For the active set method to work, an feasible starting point is needed. A good way to found such a point is by using the MatLab function linprog. This is done and can be seen in the MatLab code. This calculate a feasible point (2.47;1.12). In figure \ref{fig:exe3_contour_plot_linprog} below, the found point is seen, and it is seen that it is feasible as expected.
-\begin{figure}[H]
-	\centering	
-	\includegraphics[scale=0.65]{exe3_contour_plot_linprog.png} 
-	\caption{The contour plot with the feasible starting point found with linprog.}
-	\label{fig:exe3_contour_plot_linprog}
+
+
+\textbf{Apply a conceptual active set algorithm to the problem. Use the iteration sequence in Figure 16.3 of Nocedal and Wright. Plot the iterations sequence in your contour plot. For each iteration (guess of working set) you should list the working set, the solution, x, and the Lagrange multipliers, $\lambda$}.
+
+
+The active set algorithm iteration sequence can be seen in table \ref{table:3_1} and on figure \ref{fig:3_2}. Column $x_k$ represents the position at the start of an iteration. Column $\alpha_k * p_k'$ represents the scaled step made in corresponding iteration.
+
+\begin{center}
+    \captionof{table}{Active set iterations} \label{table:3_1} 
+    \begin{tabular}{c c c c c  } 
+    iteration & W & $x_{k}'$ & $\alpha_k * p_k'$ & $\hat{\lambda}'$ \\ 
+    \hline
+    1 & 3,5 & [2, 0] & [0, 0] & [-2, -1] \\ 
+    2 & 5 & [2, 0] & [-1, 0] & [-5] \\ 
+    3 & $\emptyset$ & [1, 0] & [0, 1.5] & [] \\
+    4 & 1 & [1, 1.5] & [0.4, 0.2] & [0.8] \\
+    5 & 1 & [1.4, 1.7] & [0, 0] & [0.8] \\
+    \end{tabular}
+\end{center}
+
+
+
+With the first iteration, a constraint is removed from the working set (step 0, remove negative $\lambda$ constraint), with the second iteration a step is made and a constraint is removed (step not 0, remove negative $\lambda$ constraint), with the third iteration a step is made and a blocking constraint is added to working set. With the fourth iteration a step is made and with the fifth iteration the algorithm stops (zero step, no negative $\lambda$).
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{fig_3_2.eps}
+    \caption{Conceptual active set iteration sequence}
+    \label{fig:3_2}
 \end{figure}
 
-Finally the entire problem could have been solve using the MatLab program quadprog. This function only needs the matrix H and A,  the vectors g and b, some boundaries and a feasible starting point. By inserting the feasible starting point found with linprog, and the system in the form og H,g A and b. The function found the optimal solution to be (1.4;1.7). Is is consistent with the one found from the active set algorithm, and seen in the contour plot as 'working set 4' in figure \ref{fig:exe3_contour_plot_workingset}.
+
+
+\textbf{Comment on the Lagrange multipliers at each iteration.}
+
+Negative multipliers indicate that moving away from the corresponding constraint and towards the feasible region lowers the objective. The multipliers in first iteration are both negative, looking at the plot this makes sense. The starting point is at the intersection of two constraints that would not be part of the optimal active set, we could remove either for next iteration.
+
+The Lagrange multiplier for the second iteration is -5, so moving away from this constraint likely yields a large decrease in the objective. Looking at the plot that is indeed the case, in fact, the step away from this constraint is in exactly opposite direction to the gradient of the objective function, i.e. the step is in direction of maximal rate of descent for the unconstrained problem. Since iteration 3 has empty working set, it obviously does not have any Lagrange multipliers associated with it.
+
+With iteration 4 we move along a constraint that when looking at the plot seems to be part of the optimal working set so we expect a positive Lagrange multiplier. The multiplier is indeed positive and since at iteration 5 the step is 0 and the single $\lambda$ is still the same 0.8 (i.e. positive) the algorithm stops.
+
+
+\textbf{Explain the active set method for convex QPs listed on p. 472 in N\&W.}
+
+We start with an initial feasible point and an active set corresponding to that point. (Linear programming problem)
+
+In each iteration we solve an equality constrained QP sub-problem using the current working set to find a step $p_k$ that would move us from the initial point for this iteration $x_k$ to the minimizer $x_k + p_k$ corresponding to the working set $W_k$. 
+
+If $p_k$ is nonzero and making the step retains feasibility in regards to the original (inequality constrained) problem, we set $x_{k+1} = x_k + p_k$ and continue to next iteration.
+
+If $p_k$ is nonzero but making the step does not retain feasibility, then there exists at least one constraint currently not in the working set that essentially blocks us from making the full step. In that case we make the largest possible step in direction of $p_k$ while maintaining feasibility, add one of the blocking constraints to the working set, and continue to next iteration.
+
+If $p_k$ is zero we compute the Lagrange multipliers $\hat{\lambda}$ corresponding to the current working set. If all these multipliers are non-negative then $x^* = x_k$ is a solution to the original problem. Using $\hat{\lambda}$ and setting all multipliers corresponding to constraints not in the working set to 0 yields the multipliers for the solution $\lambda^*$. Feasibility is guaranteed since the algorithm starts with a feasible point and only allows for feasible steps.
+
+If one of the obtained Lagrange multipliers $\hat{\lambda}$ is negative then we can move away from the corresponding constraint while reducing the objective function, this means we will remove that constraint from the working set and continue to next iteration.
+
+
+\textbf{Use linprog to compute a feasible point to a QP. Apply and test this procedure to the problem in Example 16.4.}
+
+We used linprog with empty coefficient vector f (equivalent to f(x) = 0) and the inequality constraints specified previously. Figure \ref{fig:3_3} displays the feasible starting point (0.4568, 0.0227) we obtained. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{fig_3_3.eps}
+    \caption{Feasible starting point}
+    \label{fig:3_3}
+\end{figure}
+
+Although the point might look close to a constraint on the figure, the lambdas obtained from linprog are all effectively zero and thus the initial working set is empty.
+
+\textbf{Implement the algorithm in p. 472 and test it it for the problem in Example 16.4. Print information for every iteration of the algorithm (i.e. the point $x_k$ , the working set $W_k$ , etc) and list that in your report.}
+
+Running the implemented algorithm with the same initial conditions as in table \ref{table:3_1} yields the table \ref{table:3_2}. The obvious difference is that our implemented algorithm runs for 6 iterations compared to the previous conceptual algorithm that ran for 5 iterations. The difference comes from the fact that the algorithm specified in N\&W ( Algorithm 16.3) and therefore also our implementation does not remove constraints with negative Lagrange multipliers from the working set when the computed step $p_k$ was nonzero. Statements in our implementation could be restructured if smaller number of iterations is desired. Note that $alpha_k$ and $p_k'$ are separated into different columns in table \ref{table:3_2} but otherwise the tables are identical and thus our implementation correct for the particular starting conditions.
+
+
+
+\begin{center}
+    \captionof{table}{Active set test with initial point (2, 0) } \label{table:3_2} 
+    \begin{tabular}{c c c c c c } 
+    iteration & W & $x_{k}'$ & $p_k'$ & $\hat{\lambda}'$ & $\alpha_k$ \\ 
+    \hline
+    1 & 3,5 & [2, 0] & [0, 0] & [-2, -1] & -\\ 
+    2 & 5 & [2, 0] & [-1, 0] & [-5] & 1\\ 
+    3 & 5 & [1, 0] & [0, 0] & [-5] & -\\
+    4 & $\emptyset$ & [1, 0] & [0, 2.5] & [] & 0.6\\
+    5 & 1 & [1, 1.5] & [0.4, 0.2] & [0.8] & 1\\
+    6 & 1 & [1.4, 1.7] & [0, 0] & [0.8] & -\\
+    \end{tabular}
+\end{center}
+
+
+
+\textbf{Test your active set algorithm for the problem in Example 16.4 using (16.47) and (16.48) in N\&W. Do the same using quadprog.}
+
+We tested our implementation as well as quadprog on inputs corresponding to the big M method with various feasible and infeasible starting points and verified that the our implementation and quadprog produce the same solutions.
+

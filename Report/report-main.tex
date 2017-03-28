@@ -1,7 +1,55 @@
-\input{report-preamble.tex}
+\documentclass{article}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage[a4paper]{geometry}
+\geometry{
+left = 20mm,
+right = 20mm,
+top = 20mm,
+bottom = 20mm,
+}
+
+\usepackage[backend=bibtex,
+style=numeric,
+bibencoding=ascii
+%style=alphabetic
+%style=reading
+]{biblatex}
+\addbibresource{biblio.bib}
+
+
+\usepackage[]{listings
+}
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+commentstyle=\color{deepred},%
+showstringspaces=false            % 
+}}
+
+\usepackage{hyperref}
+\usepackage{color}
+
+
+
 \begin{document}
 \input{report-titlepage.tex}
 \newpage
@@ -9,8 +57,6 @@
 \thispagestyle{empty}
 \setcounter{page}{0}
 \newpage
-\section{Introduction}
-\input{report-intro.tex}
 
 \section{Assignment}
 \input{report-problem1.tex}
@@ -20,5 +66,4 @@
 \input{report-problem5.tex}
 
 
-\input{report-conclusion.tex}
 \end{document}

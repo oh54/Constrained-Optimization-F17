@@ -1,3 +1,4 @@
+
 \subsection{Problem 1 - Quadratic Optimization}
 From the problem 1 it is seen that the system can be written as:
 \[H=\begin{bmatrix}
@@ -20,7 +21,7 @@ Then the general KKT system can be written as:
 \end{bmatrix} =\begin{bmatrix}
 	-g\\ b
 \end{bmatrix}\]
-In this specific case it give:
+Which in this case can be written as:
 \[\begin{bmatrix}
 	6 & 2 & 1 & -1 & 0\\2 & 5 & 2 & 0 & -1\\1 & 2 & 4 & -1 & -1 \\
 1 & 0 & 1 & 0 & 0\\ 0 & 1 & 1 & 0 & 0
@@ -29,15 +30,15 @@ In this specific case it give:
 \end{bmatrix} =\begin{bmatrix}
 	8 \\3 \\ 3\\ 3 \\ 0
 \end{bmatrix}\]
-The system is solve in MatLab by macking a function that solves the problem by use of the backslash command, see the code how it was done. The result shows that:
+The system is solved in MatLab by making a function that solves the problem by use of the backslash command, see the code how it was done. The result shows that:
 \[x=\begin{bmatrix}
 	2 \\ -1 \\ 1
 \end{bmatrix}\]
 \[\lambda=\begin{bmatrix}
 	3 \\ 2 
 \end{bmatrix}\]
-To test the solver, random values for x and $\lambda$ are generated, from these the H, g, A and b are determined. With these matrix and vectors the system are solved again. If the function found x and lambda there was randomly chose, the solver works. In this case the solve works as expected and gives the same values for x and lambda as there were generated.\\
-To see the sensitivity of the problem the parameter sensitivity analyse is made. The general function is as followed. 
+To test the solver, random values for x and $\lambda$ are generated, from these the H, g, A and b are determined. With these matrix and vectors the system are solved again. If the function finds the same x and lambda that were previously randomly chosen, the solver works. Our solver works as expected and gives the same values for x and lambda that were generated.\\
+To see the sensitivity of the problem parameter sensitivity analysis is conducted. The general function is as followed. 
 \[F(x,\lambda;p)= \begin{bmatrix}
 	\nabla_x f(x,p)- \nabla_x c(x,p)\lambda \\ c(x,p)
 \end{bmatrix}=\begin{bmatrix}
@@ -56,7 +57,7 @@ From this the sensitivity of this problem can be written as:
 1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&0&0\\0&0&0&0&0\\\end{bmatrix}\]
 \[W_{xx}=H\]
 \[[\nabla x(p) \lambda(p)]= - \begin{bmatrix}H & -A^T \\-A & 0\end{bmatrix}\]
-This are added to the solver and the sensitivity are found as:
+This are added to the solver and the sensitivity found are the following:
 \[\nabla x(p)=\begin{bmatrix}
  	-0.0769 &  -0.0769 &  0.0769 \\
    	-0.0769 &  -0.0769 &  0.0769 \\
@@ -71,5 +72,17 @@ This are added to the solver and the sensitivity are found as:
     2.2308  & -0.6923 \\
    -0.6923  &  3.0769 
 \end{bmatrix}\]
-Why is this correct??? 
-When having such a quadratic problem it's always also have a dual problem.   
+These sensitivities can be verified by using the following equations:
+\[x(p) \approx x(p_0)+\nabla_px(p_0)^T(p-p_0) \]
+\[\lambda(p) \approx \lambda(p_0)+\nabla_p\lambda(p_0)^T(p-p_0) \]
+These are equations(1.92) and (1.93) in Numerical Methods for Constrained Optimization by John Bagterp Joergensen.
+\\
+When dealing with such a quadratic problem we can always also write the dual problem. Since the Lagrangian for the primal is:
+\[  L(x,\lambda) = \dfrac{1}{2} x^T H x + g^T - \mu^T (A^T x-b)\]
+The dual problem is:
+\[  \max_{\substack{x, \mu}}  -\dfrac{1}{2} x^T H x + b \mu^T\]
+\[ s.t. Hx + g -A\mu = 0\]
+This maximization problem can be converted to a minimization problem by multiplying by -1. This gives the final dual problem:
+\[  \min_{\substack{x, \mu}}  \dfrac{1}{2} x^T H x - b \mu^T\]
+\[ s.t. Hx + g -A\mu = 0\]
+In the dual $\mu$ is the feasible point where in the primal it is x. They are related as so that the primal optimal is less or equal to the dual optimal. But if one of them have finite optima, primal optimal equals dual optimal. In some cases the dual problem can be simpler and therefore easier to solve the primal. 

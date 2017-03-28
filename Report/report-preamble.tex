@@ -1,108 +1,162 @@
-\documentclass[twoside,11pt,a4paper,openright]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{listings}
-\usepackage{pdfpages}
-\usepackage{amsfonts}
-\usepackage{caption}
-%\usepackage{cite}
-\usepackage{amssymb}
-\usepackage[english]{babel}
-\usepackage{fancyhdr}
-\usepackage{graphicx}
-%\usepackage{comment}
-\usepackage{siunitx}
-\usepackage{changepage}
-\usepackage[rmargin=3cm,tmargin=3cm]{geometry}
-%\usepackage[toc,page]{appendix}
-%\usepackage{natbib}
-%\usepackage{dsfont}
-\usepackage{mathrsfs}
-\usepackage{epstopdf}
-\usepackage[labelfont=bf,width=0.92\textwidth]{caption}
-% \usepackage{mathtools}
-% \usepackage{breqn}
-\usepackage{pbox}
-\usepackage{upgreek}
-\usepackage{epstopdf}
-\usepackage{subcaption}
-\usepackage{tikz}
-\usetikzlibrary{arrows}
-%\usetikzlibrary{angles}
-\usepackage{etex}
-%\usepackage{frcursive}
-\usepackage{bm}
-\setcounter{tocdepth}{3}
-\newcommand{\skr}[1]{{\text{\small\slshape\cursive {#1}}}}
-\newcommand{\fskr}[1]{\textbf{\pmb{\text{\small\slshape\cursive {#1}}}}}
-\newcommand{\sech}{\text{sech}}
-\newcommand{\diff}[3][]{\dfrac{\text{d}^{#1} #2}{\text{d} #3^{#1}}}
-\newcommand{\pdiff}[3][]{\dfrac{\partial^{#1} #2}{\partial {#3}^{#1}}}
-\newcommand{\lc}{\bigg\lbrace}
-\newcommand{\rc}{\bigg\rbrace}
-\newcommand{\ii}{\int_{-\infty}^{\infty}}
-\newcommand{\ini}{\int_0^\infty}
-\newcommand{\nk}[1][]{\vert u_{#1} \vert^2}
-\newcommand{\pp}{\frac{\partial^2 \psi}{\partial t^2}}
-\newcommand{\ppc}{\frac{\partial^2 \psi^*}{\partial t^2}}
-\newcommand{\ppp}{\frac{\partial^3 \psi}{\partial t^3}}
-\newcommand{\pppc}{\frac{\partial^3 \psi^*}{\partial t^3}}
-\newcommand{\pppp}{\frac{\partial^4 \psi}{\partial t^4}}
-\newcommand{\ppppc}{\frac{\partial^4 \psi^*}{\partial t^4}}
-\newcommand{\imag}{\text{Im}}
-\newcommand{\real}{\text{Re}}
-\newcommand{\pt}{\partial_t}
-\newcommand{\pz}{\partial_z}
-\newcommand{\px}{\partial_x}
-\newcommand{\pta}{\partial_{\tau}}
-\newcommand{\pze}{\partial_{\zeta}}
-\newcommand{\dtau}{\text{d}\tau}
-\newcommand{\dx}{\text{d}x}
-\newcommand{\dy}{\text{d}y}
-\newcommand{\df}{\text{d}f}
-\newcommand{\dt}{\text{d}t}
-\newcommand{\dk}{\text{d}k}
-\newcommand{\ddr}{\text{d}^Dr}
-\newcommand{\divg}{\nabla \cdot}
-\newcommand{\lap}{\nabla^2}
-\newcommand{\zb}{\bar{z}}
-\newcommand{\ub}{\bar{u}}
-\newcommand{\tb}{\bar{t}}
-\newcommand{\psit}[1]{\pt^{#1}\psi}
-\newcommand{\la}{\mathcal{L}}
-\newcommand{\sqp}{\sqrt{P_0}}
-\newcommand{\nks}{|u|^{2\sigma}}
-\newcommand{\nkst}{|u|^{2\sigma+2}}
-\newcommand{\uc}{u^*}
-\newcommand{\ue}{u_1}
-\newcommand{\ut}{u_2}
-\newcommand{\uez}{u_{1,z}}
-\newcommand{\utz}{u_{2,z}}
-\newcommand{\q}[1]{||#1||_{2}}
-\newcommand{\sn}{\text{sn}}
-\newcommand{\vb}{\bar{v}}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
-\pagestyle{fancy}
-\fancyhead{}
-\fancyhead[OR]{\fontsize{10}{12}\selectfont\nouppercase \thepage}
-\fancyhead[ER]{\fontsize{10}{12}\selectfont\nouppercase \leftmark}
-\fancyhead[OL]{\fontsize{10}{12}\selectfont\nouppercase \rightmark}
-\fancyhead[EL]{\thepage}
-\lstset{
-  language=C,                % choose the language of the code
-  numbers=none,                   % where to put the line-numbers
-  stepnumber=1,                   % the step between two line-numbers.        
-  numbersep=5pt,                  % how far the line-numbers are from the code
-  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
-  showspaces=false,               % show spaces adding particular underscores
-  showstringspaces=false,         % underline spaces within strings
-  showtabs=false,                 % show tabs within strings adding particular underscores
-  tabsize=2,                      % sets default tabsize to 2 spaces
-  captionpos=b,                   % sets the caption-position to bottom
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
-  title=\lstname,                 % show the filename of files included with \lstinputlisting;
-}
+% % \documentclass[twoside,11pt,a4paper,openright]{article}
+% % \usepackage[utf8]{inputenc}
+% % \usepackage{amsmath}
+% % \usepackage{listings}
+% % \usepackage{pdfpages}
+% % \usepackage{amsfonts}
+% % \usepackage{caption}
+% % %\usepackage{cite}
+% % \usepackage{amssymb}
+% % \usepackage[english]{babel}
+% % \usepackage{fancyhdr}
+% % \usepackage{graphicx}
+% % %\usepackage{comment}
+% % \usepackage{siunitx}
+% % \usepackage{changepage}
+% % \usepackage[rmargin=3cm,tmargin=3cm]{geometry}
+% % %\usepackage[toc,page]{appendix}
+% % %\usepackage{natbib}
+% % %\usepackage{dsfont}
+% % \usepackage{mathrsfs}
+% % \usepackage{epstopdf}
+% % \usepackage[labelfont=bf,width=0.92\textwidth]{caption}
+% % % \usepackage{mathtools}
+% % % \usepackage{breqn}
+% % \usepackage{pbox}
+% % \usepackage{upgreek}
+% % \usepackage{epstopdf}
+% % \usepackage{subcaption}
+% % \usepackage{tikz}
+% % \usetikzlibrary{arrows}
+% % %\usetikzlibrary{angles}
+% % % \usepackage{etex}
+% % %\usepackage{frcursive}
+% % \usepackage{bm}
+% % \setcounter{tocdepth}{3}
+% % \newcommand{\skr}[1]{{\text{\small\slshape\cursive {#1}}}}
+% % \newcommand{\fskr}[1]{\textbf{\pmb{\text{\small\slshape\cursive {#1}}}}}
+% % \newcommand{\sech}{\text{sech}}
+% % \newcommand{\diff}[3][]{\dfrac{\text{d}^{#1} #2}{\text{d} #3^{#1}}}
+% % \newcommand{\pdiff}[3][]{\dfrac{\partial^{#1} #2}{\partial {#3}^{#1}}}
+% % \newcommand{\lc}{\bigg\lbrace}
+% % \newcommand{\rc}{\bigg\rbrace}
+% % \newcommand{\ii}{\int_{-\infty}^{\infty}}
+% % \newcommand{\ini}{\int_0^\infty}
+% % \newcommand{\nk}[1][]{\vert u_{#1} \vert^2}
+% % \newcommand{\pp}{\frac{\partial^2 \psi}{\partial t^2}}
+% % \newcommand{\ppc}{\frac{\partial^2 \psi^*}{\partial t^2}}
+% % \newcommand{\ppp}{\frac{\partial^3 \psi}{\partial t^3}}
+% % \newcommand{\pppc}{\frac{\partial^3 \psi^*}{\partial t^3}}
+% % \newcommand{\pppp}{\frac{\partial^4 \psi}{\partial t^4}}
+% % \newcommand{\ppppc}{\frac{\partial^4 \psi^*}{\partial t^4}}
+% % \newcommand{\imag}{\text{Im}}
+% % \newcommand{\real}{\text{Re}}
+% % \newcommand{\pt}{\partial_t}
+% % \newcommand{\pz}{\partial_z}
+% % \newcommand{\px}{\partial_x}
+% % \newcommand{\pta}{\partial_{\tau}}
+% % \newcommand{\pze}{\partial_{\zeta}}
+% % \newcommand{\dtau}{\text{d}\tau}
+% % \newcommand{\dx}{\text{d}x}
+% % \newcommand{\dy}{\text{d}y}
+% % \newcommand{\df}{\text{d}f}
+% % \newcommand{\dt}{\text{d}t}
+% % \newcommand{\dk}{\text{d}k}
+% % \newcommand{\ddr}{\text{d}^Dr}
+% % \newcommand{\divg}{\nabla \cdot}
+% % \newcommand{\lap}{\nabla^2}
+% % \newcommand{\zb}{\bar{z}}
+% % \newcommand{\ub}{\bar{u}}
+% % \newcommand{\tb}{\bar{t}}
+% % \newcommand{\psit}[1]{\pt^{#1}\psi}
+% % \newcommand{\la}{\mathcal{L}}
+% % \newcommand{\sqp}{\sqrt{P_0}}
+% % \newcommand{\nks}{|u|^{2\sigma}}
+% % \newcommand{\nkst}{|u|^{2\sigma+2}}
+% % \newcommand{\uc}{u^*}
+% % \newcommand{\ue}{u_1}
+% % \newcommand{\ut}{u_2}
+% % \newcommand{\uez}{u_{1,z}}
+% % \newcommand{\utz}{u_{2,z}}
+% % \newcommand{\q}[1]{||#1||_{2}}
+% % \newcommand{\sn}{\text{sn}}
+% % \newcommand{\vb}{\bar{v}}
+% % \setlength{\parindent}{0pt}
+% % \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+% % \pagestyle{fancy}
+% % \fancyhead{}
+% % \fancyhead[OR]{\fontsize{10}{12}\selectfont\nouppercase \thepage}
+% % \fancyhead[ER]{\fontsize{10}{12}\selectfont\nouppercase \leftmark}
+% % \fancyhead[OL]{\fontsize{10}{12}\selectfont\nouppercase \rightmark}
+% % \fancyhead[EL]{\thepage}
+% % \lstset{
+% %   language=C,                % choose the language of the code
+% %   numbers=none,                   % where to put the line-numbers
+% %   stepnumber=1,                   % the step between two line-numbers.        
+% %   numbersep=5pt,                  % how far the line-numbers are from the code
+% %   backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+% %   showspaces=false,               % show spaces adding particular underscores
+% %   showstringspaces=false,         % underline spaces within strings
+% %   showtabs=false,                 % show tabs within strings adding particular underscores
+% %   tabsize=2,                      % sets default tabsize to 2 spaces
+% %   captionpos=b,                   % sets the caption-position to bottom
+% %   breaklines=true,                % sets automatic line breaking
+% %   breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+% %   title=\lstname,                 % show the filename of files included with \lstinputlisting;
+% % }
 
-% \fontsize{10}{12}\selectfont\nouppercase\leftmark
+% % % \fontsize{10}{12}\selectfont\nouppercase\leftmark
+
+
+
+
+% \documentclass{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage{listings}
+% \usepackage{color}
+% \definecolor{deepblue}{rgb}{0,0,0.5}
+% \definecolor{deepred}{rgb}{0.6,0,0}
+% \definecolor{deepgreen}{rgb}{0,0.5,0}
+% \usepackage{graphicx}
+% \usepackage{caption}
+% \usepackage{subcaption}
+
+% \usepackage[a4paper]{geometry}
+% \geometry{
+% left = 20mm,
+% right = 20mm,
+% top = 20mm,
+% bottom = 20mm,
+% }
+
+% \usepackage[backend=bibtex,
+% style=numeric,
+% bibencoding=ascii
+% %style=alphabetic
+% %style=reading
+% ]{biblatex}
+% \addbibresource{biblio.bib}
+
+
+% \usepackage[]{listings
+% }
+% % Python style for highlighting
+% \newcommand\pythonstyle{\lstset{
+% language=Python,
+% basicstyle=\ttm,
+% otherkeywords={self},             % Add keywords here
+% keywordstyle=\ttb\color{deepblue},
+% emph={MyClass,__init__},          % Custom highlighting
+% emphstyle=\ttb\color{deepred},    % Custom highlighting style
+% stringstyle=\color{deepgreen},
+% frame=tb,                         % Any extra options here
+% commentstyle=\color{deepred},%
+% showstringspaces=false            % 
+% }}
+
+% \usepackage{hyperref}
+% \usepackage{color}
+
+% \begin{document}
+
+% \end{document}

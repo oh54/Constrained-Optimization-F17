@@ -1,3 +1,56 @@
+\newpage
 \subsection{Problem 5 - Interior-Point Algorithm for Convex Quadratic
 Programming}
-blablablablbal
+
+One of the procedures for solving a convex quadratic program is an interior-point algorithm. To start with, we use the following standard formulation of the problem:
+\begin{equation}
+\begin{split}
+\min_{x} f(x) = \frac{1}{2} x'Hx + g'x\\
+s.t. \quad A'x = b\\
+C'x \geq d.
+\end{split}
+\end{equation}
+From this system, we can derive a Lagrangian by introducing slack variables for inequalities and further its gradient that form following KKT optimality conditions:
+\begin{equation}
+\begin{split}
+Hx + g - \sum_{i} a_i \lambda_{i} = 0, \quad i \in E \cup I\\
+a_i'x + b_i = 0, \quad i \in E\\
+c_i'x + d_i - s_i = 0, \quad i \in I \\
+s_i \lambda_{i} = 0, \quad i \in I \\
+\lambda_{i} \geq 0, \quad i \in I \\
+s_i \geq 0, \quad i \in I \\
+\end{split}
+\end{equation}
+This algorithm requires multiple iterations to find the solution and starts the procedure from a feasible solution that in fact is already non trivial. That is due to the fact that non-negativity constraints are causing the most problem so by starting within feasible area we can just make sure never to leave it and violate them. Once we have the starting point, we use Newton method to find the best direction along which we should move in order to improve the objective function. However, to make a step we also need to know how far we can move before we violate one of the constraints therefore we perform a line search along the found direction. Then we repeat this simple procedure until we reached optimality. In essence this is the key idea behind the interior-point algorithm, but if we follow described procedure we will realize that its not very effective and suffers from serious limitations. The problem is that the algorithm gets very close to the boundary very quick and therefore the steps made from there bring very little improvement before violating the constraints. 
+
+Because of that, we implement its modified version which for each iteration performs two steps that are called centering and affine. Before making the actual step toward the solution we try to get to the center in between the constrains what is supposed to ensure that the step we make is not excessively small as in case of naive version. That is followed by affine step, that simply moves along the optimal direction from a given point. Although this may sound like quite a bit more of work, it can be implemented efficiently, so that one iteration is not much more computationally expensive as the iteration of a naive procedure. This is because the most demanding part of an iteration is factorization of KKT matrix which has to be done for naive as well as modified version. In case of the latter, the factorization can be shared between the two steps, therefore even though it requires more calculations, the most demanding part is the same thus the total performance of a single iteration is not much worse, whereas the convergence rate is much better.
+
+
+
+\textbf{What is H, g, A, C, b, and d for the Markowitz Portfolio Optimization Problem with R = 15 and the presence of a risk-free security?}
+
+H is the covariance matrix with risk free security added as defined in Problem 4 section 5 and g is a 6-element  columnvector of zeros since we are only minimizing risk. A is a 6-element columnvector of ones, b is 1. This ensures that portfolio weights sum to 1. C is a 6x7 matrix with the first column being the returns and the rest of the columns form a 6x6 identity matrix, d is 7-element column vector with first element 15 and rest zeros. This ensures that expected return is at least 15 and all weights are non-negative, i.e. no short selling allowed.
+
+The variables defined in the end of MatLab file problem4.m.
+
+Next, we tried our own interior-point algorithm on this problem. As an initial starting point we used 
+\[x'= \begin{bmatrix}
+    0 &
+    0 & 
+    0 &
+    0 &
+    1 &
+    0
+\end{bmatrix}
+\], that we know to be a feasible point (weights sum to 1, all weights are non-negative and the return for asset 5 is 17.68 >= 15). For $R=15$ we obtained following portfolio:
+\[x'= \begin{bmatrix}
+    0.1546 &
+    0.1273 &
+    0.2516 &
+    0.0354 &
+    0.4201 &
+    0.0110
+\end{bmatrix}
+\]
+that is slightly different than the solution we got with quadprog built-in function since our implementation had some issues converging. The algorithm seemed to hover around the true minimum. Due to that the efficient frontier would look slightly different than on figure \label{fig:frontier_2}.   
+    
