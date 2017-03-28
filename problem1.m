@@ -39,6 +39,9 @@ g = A * lambda_true - H * x_true;
 dx
 dlambda
 % Q 7
+% Added to solver
 % Q 8
+% In report
 % Q 9 
+% In report
 % Q 10
