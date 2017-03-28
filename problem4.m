@@ -138,6 +138,28 @@ b = beq;
 d = [15 ; zeros(6,1)];
 
 %%
-clc
-PrimalDualInteriorPointSolver(H, g, A, b, C, d)
+[x,y] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
+%%
+plot_variances = [];
+plot_returns = [];
+for R = 7:0.05:17.70
+    b = -R;
+    [x,fval] = quadprog(H, f, A, b, Aeq, beq, lb, ub);    
 
+    plot_returns = [plot_returns, x' * returns];
+    plot_variances = [plot_variances, fval];
+
+end
+
+hold on;
+p2 = plot(plot_variances, plot_returns, 'LineWidth', 2);
+
+hold on;
+vars = diag(cov);
+   
+for i = 1:5
+   s = scatter(vars(i), returns(i), 20); 
+   txt = int2str(i);
+   text(vars(i)+0.1, returns(i), txt);
+    
+end

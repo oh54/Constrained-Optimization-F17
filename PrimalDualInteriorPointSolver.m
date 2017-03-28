@@ -6,13 +6,14 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
     
     % Initialization of parameters 
     x = [0.5,0.5,0,0,0,0]';
+    x = [0,0,0,0,1, 0]';
     y = ones(l,1);
     s = ones(m,1);
     z = ones(m,1);
     e = ones(m,1);    
     eta = 0.99;
     max_iter = 100;
-    tol = 10^-5;
+    tol = 10^-4;
     
     
     % Compute residuals
@@ -101,7 +102,7 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
         rC = s + d - C'*x;
         rSZ= z.*s; 
         mu = z'*s/m;
-    
+        
         Converged = (norm(rL,inf) <= tol) && ...
                     (norm(rA,inf) <= tol) && ...
                     (norm(rC,inf) <= tol) && ...
@@ -111,10 +112,10 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
     end
     x
     y
-    if ~Converged
-        x=[];
-        y=[];
-        z=[];
-        s=[];
-    end
+%     if ~Converged
+%         x=[];
+%         y=[];
+%         z=[];
+%         s=[];
+%     end
 end
