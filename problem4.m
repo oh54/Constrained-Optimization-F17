@@ -135,5 +135,9 @@ g = f;
 C = [-A' eye(6)];
 A = Aeq';
 b = beq;
-d = [-15 ; zeros(6,1)];
+d = [15 ; zeros(6,1)];
+
+%%
+clc
+PrimalDualInteriorPointSolver(H, g, A, b, C, d)
 

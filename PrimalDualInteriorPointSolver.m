@@ -1,18 +1,18 @@
 function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
     [o,p] = size(C);
     [k,l] = size(A);
-    [m,n] = size(d)
+    [m,n] = size(d);
     
     
     % Initialization of parameters 
-    x = ones(k,1);
+    x = [0.5,0.5,0,0,0,0]';
     y = ones(l,1);
     s = ones(m,1);
     z = ones(m,1);
     e = ones(m,1);    
     eta = 0.99;
     max_iter = 100;
-    tol = 10^-9;
+    tol = 10^-5;
     
     
     % Compute residuals
@@ -32,8 +32,8 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
     %%
     while ~Converged && (i<max_iter)
         % LDL factorization of modified KKT        
-        H = H + C * diag(z./s) * C'
-        KKT = [H, -A; -A', zeros(l,l)];
+        H_mod = H + C * diag(z./s) * C';
+        KKT = [H_mod, -A; -A', zeros(l,l)];
         [L,D,p] = ldl(KKT,'lower','vector');
         
         %% AFFINE STEP
@@ -101,7 +101,7 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
         rC = s + d - C'*x;
         rSZ= z.*s; 
         mu = z'*s/m;
-
+    
         Converged = (norm(rL,inf) <= tol) && ...
                     (norm(rA,inf) <= tol) && ...
                     (norm(rC,inf) <= tol) && ...
@@ -109,7 +109,8 @@ function [x, y, z, s] = PrimalDualInteriorPointSolver(H, g, A, b, C, d)
     
         i = i + 1;
     end
-    
+    x
+    y
     if ~Converged
         x=[];
         y=[];
