@@ -1,4 +1,15 @@
-function [x,info,lambda,s,iter] = LPippdModified(c,A,b,x)
+function [x,info,mu,lambda,iter] = LPippdModified(g,A,b,x)
+% LPIPPD   Primal-Dual Interior-Point LP Solver
+%
+%          min  g'*x
+%           x
+%          s.t. A x  = b      (Lagrange multiplier: mu)
+%                 x >= 0      (Lagrange multiplier: lamba)
+%
+% Syntax: [x,info,mu,lambda,iter] = LPippd(g,A,b,x)
+%
+%         info = true   : Converged
+%              = false  : Not Converged
 
 [m,n]=size(A);
 
@@ -9,125 +20,100 @@ tols = 1.0e-9;
 
 eta = 0.99;
 
-s = ones(n,1);
-lambda = zeros(m,1);
+lambda = ones(n,1);
+mu = zeros(m,1);
 
 % Compute residuals
-r_c = A'*lambda + s - c;    % Lagrangian gradient
-r_b = A*x - b;               % Equality Constraint
-xs = x.*s;             % Complementarity
-mu = sum(xs)/n;              % Duality gap (measure?)
+rL = g - A'*mu - lambda;    % Lagrangian gradient
+rA = A*x - b;               % Equality Constraint
+rC = x.*lambda;             % Complementarity
+s = sum(rC)/n;              % Duality gap
 
 % Converged
-Converged = (norm(r_c,inf) <= tolL) && ...
-            (norm(r_b,inf) <= tolA) && ...
-            (abs(mu) <= tols);
-
-%
-x_k = x;
-lambda_k = lambda;
-s_k = s;
-
+Converged = (norm(rL,inf) <= tolL) && ...
+            (norm(rA,inf) <= tolA) && ...
+            (abs(s) <= tols);
+%%        
 iter = 0;
 while ~Converged && (iter<maxit)
     iter = iter+1;
     
-    x = x_k;
-    lambda = lambda_k;
-    s = s_k;
-    
-    X = diag(x);
-    I = eye(size(X));
-    S = diag(s);
-    e = ones(n);
-    
-    % 14.30
-    F = [ -r_c ; -r_b ; -X*S*e ];
-    J_F = [ 0 A' I ; A 0 0 ; S 0 X ];
-    % 2*n + m sized vector
-    affs = J_F \ F;
-    
-    % calculate alpha_aff_pri and alpha_aff_dual
-    % calculate mu_aff
-    % set sigma
-    % solve for delta_x delta_lambda delta_s
-    % calculate alpha_pri and alpha_dual
-    % update x,lambda,s
-    
     % ====================================================================
     % Form and Factorize Hessian Matrix
     % ====================================================================
-    xdivs = x./s;
-    H = A*diag(xdivs)*A';
+    xdivlambda = x./lambda;
+    H = A*diag(xdivlambda)*A';
     L = chol(H,'lower');
     
     % ====================================================================
     % Affine Step
     % ====================================================================
     % Solve
-    tmp = (x.*r_c + xs)./s;
-    rhs = -r_b + A*tmp;
+    tmp = (x.*rL + rC)./lambda;
+    rhs = -rA + A*tmp;
     
-    ds = L'\(L\rhs);
-    dx = xdivs.*(A'*ds) - tmp;
-    ds = -(xs+s.*dx)./x;
+    % compute newton affine step
+    dmu = L'\(L\rhs);
+    dx = xdivlambda.*(A'*dmu) - tmp;
+    dlambda = -(rC+lambda.*dx)./x;
     
     % Step length
     idx = find(dx < 0.0);
     alpha = min([1.0; -x(idx,1)./dx(idx,1)]);
     
-    idx = find(ds < 0.0);
-    beta = min([1.0; -s(idx,1)./ds(idx,1)]);
+    idx = find(dlambda < 0.0);
+    beta = min([1.0; -lambda(idx,1)./dlambda(idx,1)]);
     
     % ====================================================================
     % Center Parameter
     % ====================================================================
     xAff = x + alpha*dx;
-    sAff = s + beta*ds;
-    sAff = sum(xAff.*sAff)/n;
+    lambdaAff = lambda + beta*dlambda;
+    sAff = sum(xAff.*lambdaAff)/n;
     
-    sigma = (sAff/mu)^3;
-    tau = sigma*mu;    
+    sigma = (sAff/s)^3;
+    tau = sigma*s;    
 
     % ====================================================================
     % Center-Corrector Step
     % ====================================================================
-    xs = xs + dx.*ds - tau;
+    rC = rC + dx.*dlambda - tau;
     
-    tmp = (x.*r_c + xs)./s;
-    rhs = -r_b + A*tmp;
+    tmp = (x.*rL + rC)./lambda;
+    rhs = -rA + A*tmp;
     
-    ds = L'\(L\rhs);
-    dx = xdivs.*(A'*ds) - tmp;
-    ds = -(xs+s.*dx)./x;
+    % compute newton step with correcting for linearization and centering
+    dmu = L'\(L\rhs);
+    dx = xdivlambda.*(A'*dmu) - tmp;
+    dlambda = -(rC+lambda.*dx)./x;
     
     % Step length
     idx = find(dx < 0.0);
     alpha = min([1.0; -x(idx,1)./dx(idx,1)]);
     
-    idx = find(ds < 0.0);
-    beta = min([1.0; -s(idx,1)./ds(idx,1)]);
+    idx = find(dlambda < 0.0);
+    beta = min([1.0; -lambda(idx,1)./dlambda(idx,1)]);
 
     % ====================================================================
     % Take step 
     % ====================================================================
     x = x + (eta*alpha)*dx;
-    lambda = lambda + (eta*beta)*ds;
-    s = s + (eta*beta)*ds;
+    mu = mu + (eta*beta)*dmu;
+    lambda = lambda + (eta*beta)*dlambda;
     
     % ====================================================================
     % Residuals and Convergence
     % ====================================================================
     % Compute residuals
-    r_c = c - A'*lambda - s;    % Lagrangian gradient
-    r_b = A*x - b;               % Equality Constraint
-    xs = x.*s;             % Complementarity
-    mu = sum(xs)/n;              % Duality gap
+    rL = g - A'*mu - lambda;    % Lagrangian gradient
+    rA = A*x - b;               % Equality Constraint
+    rC = x.*lambda;             % Complementarity
+    s = sum(rC)/n;              % Duality gap
 
     % Converged
-    Converged = (norm(r_c,inf) <= tolL) && ...
-                (norm(r_b,inf) <= tolA) && ...
-                (abs(mu) <= tols);
+    Converged = (norm(rL,inf) <= tolL) && ...
+                (norm(rA,inf) <= tolA) && ...
+                (abs(s) <= tols);
 end
 
 %%
@@ -135,7 +121,7 @@ end
 info = Converged;
 if ~Converged
     x=[];
+    mu=[];
     lambda=[];
-    s=[];
 end
     
