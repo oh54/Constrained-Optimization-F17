@@ -13,22 +13,22 @@ c4 = x1 >= 0;
 c5 = x2 >= 0;
 
 % % Q1 
-% v = [0:0.5:3 3:2:15 15:10:100 100:20:200];
-% contour(x1,x2,q,v, 'linewidth',1);
-% title('Feasible starting point obtained with linprog')
-% xlabel('x_1');
-% ylabel('x_2');
-% colorbar
-% hold on
-% calpha=0.6;
-% msize=0.05;
-% scatter(x1(~c1), x2(~c1), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
-% scatter(x1(~c2), x2(~c2), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
-% scatter(x1(~c3), x2(~c3), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
-% scatter(x1(~c4), x2(~c4), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
-% scatter(x1(~c5), x2(~c5), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
-% axis([-1 5 -1 5]);
-% hold off
+v = [0:0.5:3 3:2:15 15:10:100 100:20:200];
+ contour(x1,x2,q,v, 'linewidth',1);
+ title('Feasible starting point obtained with linprog')
+ xlabel('x_1');
+ ylabel('x_2');
+ colorbar
+ hold on
+ calpha=0.6;
+ msize=0.05;
+ scatter(x1(~c1), x2(~c1), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
+ scatter(x1(~c2), x2(~c2), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
+ scatter(x1(~c3), x2(~c3), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
+ scatter(x1(~c4), x2(~c4), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
+ scatter(x1(~c5), x2(~c5), msize, 'black', 'MarkerFaceAlpha', calpha, 'MarkerEdgeAlpha', calpha);
+ axis([-1 5 -1 5]);
+ hold off
 
 % Q2 - KKT conditions
 H = [2 0;0 2];
