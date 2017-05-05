@@ -53,9 +53,8 @@ for k = 1:50;
    
     s = lambda.ineqlin;
     mu = max(abs(s),0.5*(mu+abs(s)));
-    %line sceach 
-    alpha = linesearch(x, alpha, p, mu)
-    p = alpha*p;
+    alpha = linesearch(x, alpha, p, mu) %the line search part
+    p = alpha*p; % if the algorithm should be used without line search algorithm, alpha can be redefine to equal 1 below the lineseach function, or the line with the linesearch comand can be marked as a comment.    
     [gradc] = Himmelblau_L_grad(x);
     c = gradc;
     nablax_L = g - c*s;
@@ -81,7 +80,7 @@ for k = 1:50;
     scatter(x(1),x(2),10,'black','filled');
     text(x(1),x(2),num2str(i),'FontSize',9);
     
-    num = [i (x(1)) (x(2)) (((x(1)-x_true(1))^2)^(1/2)) (((x(2)-x_true(2))^2)^(1/2)) (nablax_L(1)) (nablax_L(2))];
+    num = [i (x(1)) (x(2)) (((x(1)-x_true(1))^2+(x(2)-x_true(2))^2)^(1/2)) (nablax_L(1)) (nablax_L(2))];
     T(i,:)=num;
 end
 x_end = x;
@@ -89,11 +88,11 @@ B_end = B_k;
 scatter(x_end(1),x_end(2),[15],'R','filled');
 text(x_end(1),x_end(2),'F','color','r','FontSize',10,'HorizontalAlignment','right');
 hold off
-Table = array2table(T,'VariableNames',{'iterationNumber' 'x1' 'x2' 'error_x1' 'error_x2' 'Nablax_L_x1' 'Nablax_L_x2'});
+Table = array2table(T,'VariableNames',{'iterationNumber' 'x1' 'x2' 'error' 'Nablax_L_x1' 'Nablax_L_x2'});
 
 
 %%
-%the line sceach
+%the trust region 
 
 
 
