@@ -1,8 +1,10 @@
-function [ x_k, fval, lambda_k, k ] = EqSQP( x_0, lambda_0, maxiter, epsilon )
+function [ x_k, fval, lambda_k, k, X ] = EqSQP( x_0, lambda_0, maxiter, epsilon )
 % Equality constrained non-linear programming solver using
 % sequential quadratic programming approach
 
+
 x_k = x_0;
+X = [x_k];
 lambda_k = lambda_0;
 k = 0;
 
@@ -26,6 +28,7 @@ while (k < maxiter)
     [p, lambda] = EQPSolver(hessian_L, grad_fk, A_k', -c_k);
     
     x_k = x_k + p;
+    X = [X x_k];
     lambda_k = lambda;
     k = k + 1;
     
