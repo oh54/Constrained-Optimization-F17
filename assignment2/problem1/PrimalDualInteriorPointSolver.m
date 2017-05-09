@@ -23,7 +23,7 @@ function [x,mu,lambda,Converged] = PrimalDualInteriorPointSolver(g,A,b,x)
                 (abs(s) <= tol);
     
     %%
-    i = 0;
+    i = 1;
     while ~Converged && (i<max_iter)
         % Cholesky factorization of normal equations
         G = A * diag(x./lambda) * A';        
