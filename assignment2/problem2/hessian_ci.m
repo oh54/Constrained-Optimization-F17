@@ -10,9 +10,7 @@ function [ val ] = hessian_ci( x, i )
             end
         end
     end
-    
     H = hessian(c, [x1, x2, x3, x4, x5]);
-    
     xCell = num2cell(x);
     [x1, x2, x3, x4, x5] = xCell{:};
     val = eval(subs(H));
