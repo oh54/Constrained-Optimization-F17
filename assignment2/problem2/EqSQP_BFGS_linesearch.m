@@ -1,23 +1,17 @@
-function [ x_k, fval, lambda_k, k, X ] = EqSQP_BFGS_linesearch( x_0, lambda_0, maxiter, epsilon, tau, eta )
+function [ x_k, fval, lambda_k, k, X, alphas ] = EqSQP_BFGS_linesearch( x_0, lambda_0, maxiter, epsilon, tau, eta )
 % Equality constrained non-linear programming solver using
 % sequential quadratic programming approach with damped BFGS approximation
 % to the hessian of the lagrangian and linesearch procedure
-
 x_k = x_0;
 X = [ x_k ];
-
 lambda_k = lambda_0;
-k = 0;
-%hessian_L = hessian_f(x_k) - (lambda_k(1) * hessian_ci(x_k,1) + ...
-%                              lambda_k(2) * hessian_ci(x_k,2) + ...
-%                              lambda_k(3) * hessian_ci(x_k,3));
-%B_k = hessian_L;    
+k = 0;  
 B_k = eye(5);
 grad_fk = gradient_f(x_k);
 A_k = jacobian_c(x_k);
 mu_k = 0;
-
-tau_alpha = 0.5 * tau;
+alphas = [];
+tau_alpha = tau;
 
 while (k < maxiter) 
     c_k = c(x_k);
@@ -29,21 +23,19 @@ while (k < maxiter)
         break
     end
     
-    [p_k, lambda_hat] = EQPSolver(B_k, grad_fk, A_k', -c_k);
+    [p_k, lambda_hat] = EqualityQPSolverLU(B_k, grad_fk, A_k', -c_k);
     p_lambda = lambda_hat - lambda_k;
     
     % Choose mu_k to satisfy (18.36) with sigma = 1, rho = 0.5
     mu_k = get_mu(mu_k, grad_fk, p_k, B_k, c_k, 1, 0.5, 0.01);
     alpha_k = 1;
-    % backtracking linesearch procedure
-    % merit at potential point
-    
     % if mu_k hasn't changed this iteration, phi_1(x_k, mu_k) would not 
     % need to be recomputed
     while phi_1(x_k + alpha_k * p_k, mu_k) > phi_1(x_k, mu_k) + get_decrease_term(mu_k, eta, alpha_k, grad_fk, p_k, c_k) 
-        alpha_k = tau_alpha * alpha_k
+        alpha_k = tau_alpha * alpha_k;
         %k
     end
+    alphas = [alphas alpha_k];
         
     x_kplus1 = x_k + alpha_k * p_k;
     lambda_kplus1 = lambda_k + alpha_k * p_lambda;
