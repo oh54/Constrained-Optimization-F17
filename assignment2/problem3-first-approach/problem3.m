@@ -40,7 +40,7 @@ contour(x1,x2,q,v);
 scatter(x0(1),x0(2),[10],'r','filled');
     text(x0(1),x0(2),'S','color','r','FontSize',10,'HorizontalAlignment','right');
 
-for k = 1:50;
+for k = 1:1;
     [~,nablaf_k] = Himmelblau(x);
     g = nablaf_k;
         if norm(g,inf) < tol
@@ -53,7 +53,7 @@ for k = 1:50;
    
     s = lambda.ineqlin;
     mu = max(abs(s),0.5*(mu+abs(s)));
-    alpha = linesearch(x, alpha, p, mu) %the line search part
+    %alpha = linesearch(x, alpha, p, mu) %the line search part
     p = alpha*p; % if the algorithm should be used without line search algorithm, alpha can be redefine to equal 1 below the lineseach function, or the line with the linesearch comand can be marked as a comment.    
     [gradc] = Himmelblau_L_grad(x);
     c = gradc;

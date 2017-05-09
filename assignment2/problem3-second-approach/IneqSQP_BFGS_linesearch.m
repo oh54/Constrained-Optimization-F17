@@ -1,11 +1,11 @@
-function [ x_k, fval, lambda_k, k, X ] = IneqSQP_BFGS_linesearch( x_0, lambda_0, maxiter, epsilon, tau, eta )
+function [ x_k, fval, lambda_k, k, X, alphas ] = IneqSQP_BFGS_linesearch( x_0, lambda_0, maxiter, epsilon, tau, eta )
 % Inequality constrained non-linear programming solver using
 % sequential quadratic programming approach with damped BFGS approximation
 % to the hessian of the lagrangian and linesearch procedure
 
 x_k = x_0;
 X = [ x_k ];
-
+alphas = [];
 lambda_k = lambda_0;
 k = 0;
 B_k = eye(2);
@@ -49,7 +49,8 @@ while (k < maxiter)
         alpha_k = tau_alpha * alpha_k;
         %k
     end
-        
+    
+    alphas = [alphas alpha_k];
     x_kplus1 = x_k + alpha_k * p_k;
     lambda_kplus1 = lambda_k + alpha_k * p_lambda;
     
