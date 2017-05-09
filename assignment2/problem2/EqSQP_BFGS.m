@@ -1,17 +1,23 @@
-function [ x_k, fval, lambda_k, k ] = EqSQP_BFGS( x_0, lambda_0, maxiter, epsilon )
+function [ x_k, fval, lambda_k, k, X ] = EqSQP_BFGS( x_0, lambda_0, maxiter, epsilon )
 % Equality constrained non-linear programming solver using
 % sequential quadratic programming approach with damped BFGS approximation
 % to the hessian of the lagrangian
 
 x_k = x_0;
+
+X = [ x_k ];
+
 lambda_k = lambda_0;
 k = 0;
-hessian_L = hessian_f(x_k) - (lambda_k(1) * hessian_ci(x_k,1) + ...
-                              lambda_k(2) * hessian_ci(x_k,2) + ...
-                              lambda_k(3) * hessian_ci(x_k,3));
-B_k = hessian_L;    
+%hessian_L = hessian_f(x_k) - (lambda_k(1) * hessian_ci(x_k,1) + ...
+%                              lambda_k(2) * hessian_ci(x_k,2) + ...
+%                              lambda_k(3) * hessian_ci(x_k,3));
+%B_k = hessian_L;
+B_k = eye(5);
 grad_fk = gradient_f(x_k);
 A_k = jacobian_c(x_k);
+
+
 
 while (k < maxiter) 
     c_k = c(x_k);
@@ -52,6 +58,7 @@ while (k < maxiter)
     grad_fk = grad_fkplus1;
     A_k = A_kplus1;
     x_k = x_kplus1;
+    X = [X x_k];
     lambda_k = lambda_kplus1;
     k = k + 1;  
 end
